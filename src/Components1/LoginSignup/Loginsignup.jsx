@@ -11,7 +11,6 @@ const Loginsignup = () => {
 
     const [action,setAction] = useState("SignUp")
     const [formData, setFormData] =useState({ name:"", email:"", password:"" })
-    const [error, setError] = useState("")
     const navigate = useNavigate()
   
     // Handle input change
@@ -22,15 +21,28 @@ const Loginsignup = () => {
     // Clear form 
     const clearForm = () =>{
       setFormData({ name:"", email:"",password:""})
-      setError("")
+      // setError("")
     }
 
    // signup function
   const handleSignUp = () => {
     const { name, email, password } = formData;
     if (!name || !email || !password) {
-      setError("All fields are required!");
-      
+      alert("All fields are required!");
+      return;
+    }
+
+    if (name.length < 8) {
+      alert("Name must be at least 8 characters!");
+      return;
+    }
+    // if (!email.endsWith("@gmail.com")) {
+    if (!email.includes("@")) {
+      alert("Email must include @");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters!");
       return;
     }
 
@@ -50,7 +62,16 @@ const Loginsignup = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (!email || !password) {
-      setError("Email & Password required!");
+      alert("Email & Password required!");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      alert("Invalid Email! Must include @");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters!");
       return;
     }
 
@@ -67,7 +88,7 @@ const Loginsignup = () => {
       clearForm();
       navigate("/navbar"); // Navbar page pe navigate
     } else {
-      setError("Invalid Credentials!");
+      alert("Invalid Credentials!");
     }
   };
 
@@ -114,10 +135,6 @@ const Loginsignup = () => {
             </div>
         </div>
 
-
-        {/* {action==="SignUp"? null :<div className="forgot-password">Forgot Password ? <span>Click Here</span></div>} */}
-        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-
       {action === "Login" && (<div className="forgot-password"> Forgot Password ? <span>Click Here</span></div>)}
         
         <div className="submit-container">
@@ -128,8 +145,6 @@ const Loginsignup = () => {
    <div className="submit gray" onClick={() => setAction(action === "SignUp" ? "Login" : "SignUp")}>
           {action === "SignUp" ? "Go to Login" : "Go to SignUp"} </div>
           
-            {/* <div className={action==="Login"?"submit gray":"submit"} onClick={()=>{setAction("SignUp")}} >SignUp</div>
-            <div className={action==="SignUp"?"submit gray":"submit"} onClick={()=>{setAction("Login")}} >Login</div> */}
 
         </div>
     </div>
@@ -141,42 +156,3 @@ const Loginsignup = () => {
 
 export default Loginsignup
 
-
-
-  // const [formData, setFormData] = useState({ name: "", email: "", password: "" });
-  //    const navigate = useNavigate();
-
-  //      const handleChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  // };
-
-  //   const handleSubmit = async () => {
-  //   try {
-  //     let url =
-  //       action === "SignUp"
-  //         ? "http://localhost:5000/api/auth/signup"
-  //         : "http://localhost:5000/api/auth/login";
-
-  //     const res = await fetch(url, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(formData),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (data.token) {
-  //       localStorage.setItem("token", data.token);
-  //       navigate("/home"); // navigate to home after login/signup
-  //     } else {
-  //       alert(data.msg || "Something went wrong");
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-
-      // <button className="submit" onClick={handleSubmit}>
-      //   {action}
-      // </button>
